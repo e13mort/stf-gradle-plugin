@@ -1,0 +1,55 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+def ARTIFACT_ID = 'stf-gradle-plugin'
+def ARTIFACT_VERSION = '0.2.0'
+
+repositories {
+    mavenLocal()
+    maven { url 'http://dl.bintray.com/e13mort/maven/' }
+    maven { url 'https://jitpack.io' }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
+dependencies {
+    compile gradleApi()
+    compile 'com.github.e13mort:open-stf-client:0.2.0'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.github.e13mort'
+            artifactId = ARTIFACT_ID
+            version = ARTIFACT_VERSION
+            from components.java
+        }
+    }
+}
+
+bintray {
+    user = bintray_user
+    key = bintray_key
+    publications = ['mavenJava']
+    pkg {
+        repo = 'maven'
+        name = ARTIFACT_ID
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/e13mort/stf-rest-client.git'
+        version {
+            name = ARTIFACT_VERSION
+        }
+    }
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
