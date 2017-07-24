@@ -1,5 +1,7 @@
 # STF gradle plugin
 
+[![Build Status](https://travis-ci.org/e13mort/STF-gradle-plugin.svg?branch=master)](https://travis-ci.org/e13mort/STF-gradle-plugin)
+
 The `stf-gradle-plugin` allows you to automate a [farm](https://openstf.io/) connection process. 
 
 ## Enabling the plugin

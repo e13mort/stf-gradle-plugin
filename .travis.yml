@@ -1,0 +1,12 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+# cache between builds
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.gradle
+
+script: clean :gradle-plugin:build :gradle-plugin:check
