@@ -39,8 +39,8 @@ publishing {
 }
 
 bintray {
-    user = bintray_user
-    key = bintray_key
+    user = rootProject.ext.bintrayUser
+    key = rootProject.ext.bintrayKey
     publications = ['mavenJava']
     pkg {
         repo = 'maven'
