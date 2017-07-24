@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
+apply from: 'junit.gradle'
 
 def ARTIFACT_ID = 'stf-gradle-plugin'
 def ARTIFACT_VERSION = '0.2.1'
@@ -17,6 +18,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
     }
 }
 

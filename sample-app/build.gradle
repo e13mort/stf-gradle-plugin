@@ -28,7 +28,7 @@ buildscript {
         maven { url 'http://dl.bintray.com/e13mort/maven' }
     }
     dependencies {
-        classpath 'com.github.e13mort:stf-gradle-plugin:0.2.0'
+        classpath 'com.github.e13mort:stf-gradle-plugin:0.2.1'
     }
 }
 
@@ -40,14 +40,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
     testCompile 'junit:junit:4.12'
-}
-
-project.tasks.whenTaskAdded {
-    Task task ->
-        if (task.getName() == 'connectedDebugAndroidTest') {
-            task.dependsOn(connectToSmartphoneTestFarm)
-        }
-
 }
 
 farmSettings {
