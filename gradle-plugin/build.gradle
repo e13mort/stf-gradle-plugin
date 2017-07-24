@@ -3,7 +3,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 def ARTIFACT_ID = 'stf-gradle-plugin'
-def ARTIFACT_VERSION = '0.2.0'
+def ARTIFACT_VERSION = '0.2.1'
 
 repositories {
     mavenLocal()
@@ -22,7 +22,7 @@ buildscript {
 
 dependencies {
     compile gradleApi()
-    compile 'com.github.e13mort:open-stf-client:0.2.0'
+    compile 'com.github.e13mort:open-stf-client:0.3.1'
 }
 
 publishing {

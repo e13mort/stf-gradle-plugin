@@ -1,6 +1,6 @@
 package com.github.e13mort.stfgradleplugin;
 
-import com.github.e13mort.stf.adapter.filters.ProviderStringParser;
+import com.github.e13mort.stf.adapter.filters.StringsFilterParser;
 import com.github.e13mort.stf.client.DevicesParams;
 
 import org.gradle.api.Project;
@@ -15,6 +15,7 @@ class ProjectPropertyReader {
     private static final String KEY_STF_COUNT = "STF_COUNT";
     private static final String KEY_STF_ABI = "STF_ABI";
     private static final String KEY_STF_NAME = "STF_NAME";
+    private static final String KEY_STF_SERIAL = "STF_SERIAL";
     private static final String KEY_STF_MIN_API = "STF_MIN_API";
     private static final String KEY_STF_MAX_API = "STF_MAX_API";
 
@@ -33,6 +34,7 @@ class ProjectPropertyReader {
         setupCount(params, properties);
         setupAbi(params, properties);
         setupName(params, properties);
+        setupSerial(params, properties);
         setupMinApi(params, properties);
         setupMaxApi(params, properties);
         return params;
@@ -59,10 +61,24 @@ class ProjectPropertyReader {
     }
 
     private void setupName(DevicesParams params, Map<String, ?> properties) {
-        try {
-            params.setName((String) properties.get(KEY_STF_NAME));
-        } catch (Exception e) {
-            log(e);
+        if (properties.containsKey(KEY_STF_NAME)) {
+            final StringsFilterParser parser = new StringsFilterParser();
+            try {
+                params.setNameFilterDescription(parser.parse((String) properties.get(KEY_STF_NAME)));
+            } catch (Exception e) {
+                log(e);
+            }
+        }
+    }
+
+    private void setupSerial(DevicesParams params, Map<String, ?> properties) {
+        if (properties.containsKey(KEY_STF_SERIAL)) {
+            final StringsFilterParser parser = new StringsFilterParser();
+            try {
+                params.setSerialFilterDescription(parser.parse((String) properties.get(KEY_STF_SERIAL)));
+            } catch (Exception e) {
+                log(e);
+            }
         }
     }
 
@@ -75,10 +91,10 @@ class ProjectPropertyReader {
     }
 
     private void setupProvider(DevicesParams params, Map<String, ?> properties) {
-        final ProviderStringParser parser = new ProviderStringParser();
         if (properties.containsKey(KEY_STF_PROVIDER)) {
+            final StringsFilterParser parser = new StringsFilterParser();
             try {
-                params.setProviderDescription(parser.parse((String) properties.get(KEY_STF_PROVIDER)));
+                params.setProviderFilterDescription(parser.parse((String) properties.get(KEY_STF_PROVIDER)));
             } catch (Exception e) {
                 log(e);
             }
