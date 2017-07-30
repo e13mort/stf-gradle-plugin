@@ -9,4 +9,4 @@ cache:
   - $HOME/.m2
   - $HOME/.gradle
 
-script: clean :gradle-plugin:build :gradle-plugin:check
+script: ./gradlew clean assemble check
