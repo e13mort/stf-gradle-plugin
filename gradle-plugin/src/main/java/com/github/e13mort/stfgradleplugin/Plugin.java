@@ -32,7 +32,7 @@ public class Plugin implements org.gradle.api.Plugin<Project> {
     }
 
     private void logTaskAttached(Task task, Project project) {
-        project.getLogger().log(LogLevel.LIFECYCLE, "attached to the " + task.getName() + " task");
+        project.getLogger().log(LogLevel.LIFECYCLE, "STF connection task attached to the " + task.getName() + " task");
     }
 
 }
