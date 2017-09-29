@@ -4,7 +4,7 @@ apply plugin: 'com.jfrog.bintray'
 apply from: 'junit.gradle'
 
 def ARTIFACT_ID = 'stf-gradle-plugin'
-def ARTIFACT_VERSION = '0.2.1'
+def ARTIFACT_VERSION = '0.2.2'
 
 repositories {
     mavenLocal()
@@ -24,7 +24,7 @@ buildscript {
 
 dependencies {
     compile gradleApi()
-    compile 'com.github.e13mort:open-stf-client:0.3.1'
+    compile 'com.github.e13mort:open-stf-client:0.3.2'
 }
 
 publishing {
