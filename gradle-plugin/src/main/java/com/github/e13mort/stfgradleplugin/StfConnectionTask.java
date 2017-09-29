@@ -36,8 +36,7 @@ public class StfConnectionTask extends DefaultTask {
     }
 
     private DevicesParams getDeviceParams() {
-        final ProjectPropertyReader reader = new ProjectPropertyReader(getProject(), getLogger());
-        return reader.readParams();
+        return new PropertiesDevicesParamsImpl(getProject().getProperties(), getLogger());
     }
 
     private FarmInfo getFarmInfo(PluginSettings settings) {
