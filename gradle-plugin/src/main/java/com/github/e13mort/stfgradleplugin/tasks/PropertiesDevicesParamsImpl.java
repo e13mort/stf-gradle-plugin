@@ -1,4 +1,4 @@
-package com.github.e13mort.stfgradleplugin;
+package com.github.e13mort.stfgradleplugin.tasks;
 
 import com.github.e13mort.stf.adapter.filters.StringsFilterDescription;
 import com.github.e13mort.stf.adapter.filters.StringsFilterParser;
@@ -25,7 +25,7 @@ final class PropertiesDevicesParamsImpl implements DevicesParams {
 
     private final Map<String, ?> properties;
 
-    public PropertiesDevicesParamsImpl(Map<String, ?> properties, Logger logger) {
+    PropertiesDevicesParamsImpl(Map<String, ?> properties, Logger logger) {
         this.logger = logger;
         this.properties = properties;
     }
@@ -77,18 +77,16 @@ final class PropertiesDevicesParamsImpl implements DevicesParams {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("PropertiesDevicesParamsImpl{");
-        sb.append("allDevices=").append(isAllDevices());
-        sb.append(", abi='").append(getAbi()).append('\'');
-        sb.append(", apiVersion=").append(getApiVersion());
-        sb.append(", count=").append(getCount());
-        sb.append(", nameFilterDescription=").append(getNameFilterDescription());
-        sb.append(", minApiVersion=").append(getMinApiVersion());
-        sb.append(", maxApiVersion=").append(getMaxApiVersion());
-        sb.append(", providerFilterDescription=").append(getProviderFilterDescription());
-        sb.append(", serialFilterDescription=").append(getSerialFilterDescription());
-        sb.append('}');
-        return sb.toString();
+        return "PropertiesDevicesParamsImpl{" + "allDevices=" + isAllDevices() +
+                ", abi='" + getAbi() + '\'' +
+                ", apiVersion=" + getApiVersion() +
+                ", count=" + getCount() +
+                ", nameFilterDescription=" + getNameFilterDescription() +
+                ", minApiVersion=" + getMinApiVersion() +
+                ", maxApiVersion=" + getMaxApiVersion() +
+                ", providerFilterDescription=" + getProviderFilterDescription() +
+                ", serialFilterDescription=" + getSerialFilterDescription() +
+                '}';
     }
 
     private int readInteger(String key) {
