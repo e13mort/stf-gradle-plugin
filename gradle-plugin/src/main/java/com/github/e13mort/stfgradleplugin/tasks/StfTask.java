@@ -13,19 +13,31 @@ import org.gradle.api.tasks.TaskAction;
 
 public abstract class StfTask extends DefaultTask {
 
-    public static final String TAG_STF = "STF";
-    public static final String TAG_ADB = "ADB";
+    static final String TAG_STF = "STF";
+    static final String TAG_ADB = "ADB";
 
     @TaskAction
     public abstract void run();
 
-    protected FarmInfo getFarmInfo() {
+    FarmInfo getFarmInfo() {
         final PluginSettings settings = getSettings();
         return new FarmInfo(settings.getBaseUrl(), settings.getApiKey(), settings.getAdbPath(), settings.getTimeout());
     }
 
-    protected void log(String tag, String message) {
-        getLogger().log(LogLevel.LIFECYCLE, tag + ": " + message);
+    void logI(String tag, String message) {
+        log(tag, message, LogLevel.INFO);
+    }
+
+    void logL(String tag, String message) {
+        log(tag, message, LogLevel.LIFECYCLE);
+    }
+
+    void log(String message, Throwable e) {
+        getLogger().log(LogLevel.ERROR, message, e);
+    }
+
+    private void log(String tag, String message, LogLevel level) {
+        getLogger().log(level, tag + ": " + message);
     }
 
     private PluginSettings getSettings() {
@@ -35,10 +47,6 @@ public abstract class StfTask extends DefaultTask {
         }
         settings.validate(getLogger());
         return settings;
-    }
-
-    protected void log(String message, Throwable e) {
-        getLogger().log(LogLevel.ERROR, message, e);
     }
 
 }

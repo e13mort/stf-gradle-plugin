@@ -19,7 +19,7 @@ public class StfDisconnectionTask extends StfTask {
                 .subscribe(new Consumer<Notification<String>>() {
                                @Override
                                public void accept(@NonNull Notification<String> notification) throws Exception {
-                                   log(TAG_STF, "Disconnected from " + notification.getValue());
+                                   logI(TAG_STF, "Disconnected from " + notification.getValue());
                                }
                            }
                         , new Consumer<Throwable>() {

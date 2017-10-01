@@ -1,5 +1,7 @@
 package com.github.e13mort.stfgradleplugin.tasks;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.e13mort.stf.client.DevicesParams;
 import com.github.e13mort.stf.client.FarmClient;
 import com.github.e13mort.stf.client.FarmInfo;
@@ -19,13 +21,24 @@ public class StfConnectionTask extends StfTask {
     public void run() {
         final FarmInfo info = getFarmInfo();
         final FarmClient farmClient = FarmClient.create(info);
+        final DevicesParams deviceParams = getDeviceParams();
+        logI(TAG_STF, convertParamsToString(deviceParams));
         farmClient
-                .connectToDevices(getDeviceParams())
+                .connectToDevices(deviceParams)
                 .subscribe(new NotificationConsumer(info), new ThrowableConsumer());
     }
 
     private DevicesParams getDeviceParams() {
         return new PropertiesDevicesParamsImpl(getProject().getProperties(), getLogger());
+    }
+
+    private String convertParamsToString(final DevicesParams deviceParams) {
+        final ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(deviceParams);
+        } catch (JsonProcessingException e) {
+            return deviceParams.toString();
+        }
     }
 
     private class ThrowableConsumer implements Consumer<Throwable> {
@@ -58,17 +71,17 @@ public class StfConnectionTask extends StfTask {
         }
 
         private void runAdb(String command) throws IOException {
-            log(StfTask.TAG_STF, "Run command: " + command);
+            logL(StfTask.TAG_STF, "Run command: " + command);
             final Process process = Runtime.getRuntime().exec(command);
             final InputStream stream = process.getInputStream();
             final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             try {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    log(StfTask.TAG_ADB, line);
+                    logL(StfTask.TAG_ADB, line);
                 }
             } catch (IOException e) {
-                log("Line reading error", e.getMessage());
+                log("Line reading error", e);
             } finally {
                 reader.close();
                 stream.close();
