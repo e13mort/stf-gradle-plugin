@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 
 import io.reactivex.Notification;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 public class StfConnectionTask extends StfTask {
@@ -22,10 +23,11 @@ public class StfConnectionTask extends StfTask {
         final FarmInfo info = getFarmInfo();
         final FarmClient farmClient = FarmClient.create(info);
         final DevicesParams deviceParams = getDeviceParams();
+        final NotificationsHandler handler = new NotificationsHandler(info);
         logI(TAG_STF, convertParamsToString(deviceParams));
         farmClient
                 .connectToDevices(deviceParams)
-                .subscribe(new NotificationConsumer(info), new ThrowableConsumer());
+                .subscribe(handler, new ThrowableConsumer(), handler);
     }
 
     private DevicesParams getDeviceParams() {
@@ -44,19 +46,15 @@ public class StfConnectionTask extends StfTask {
     private class ThrowableConsumer implements Consumer<Throwable> {
         @Override
         public void accept(@NonNull Throwable throwable) throws Exception {
-            fail(throwable.getMessage());
+            getState().setOutcome(new Exception(throwable.getMessage()));
             log("An error occurred during connection", throwable);
-        }
-
-        private void fail(String message) {
-            getState().setOutcome(new Exception(message));
         }
     }
 
-    private class NotificationConsumer implements Consumer<Notification<String>> {
+    private class NotificationsHandler implements Consumer<Notification<String>>, Action {
         private final FarmInfo info;
 
-        NotificationConsumer(FarmInfo info) {
+        NotificationsHandler(FarmInfo info) {
             this.info = info;
         }
 
@@ -64,10 +62,14 @@ public class StfConnectionTask extends StfTask {
         public void accept(@NonNull Notification<String> ipNotification) throws Exception {
             if (ipNotification.isOnNext()) {
                 runAdb(info.getSdkPath() + "adb connect " + ipNotification.getValue());
-                runAdb(info.getSdkPath() + "adb wait-for-any-device");
             } else {
                 log("Skip device", ipNotification.getError());
             }
+        }
+
+        @Override
+        public void run() throws Exception {
+            runAdb(info.getSdkPath() + "adb wait-for-any-device");
         }
 
         private void runAdb(String command) throws IOException {
