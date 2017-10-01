@@ -15,6 +15,7 @@ buildscript {
     project.ext {
         bintrayUser = project.getProperties().get('bintray_user', 'unknown_user')
         bintrayKey = project.getProperties().get('bintray_key', 'unknown_key')
+        groupId = 'com.github.e13mort'
     }
 }
 
