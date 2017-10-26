@@ -3,8 +3,12 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 apply from: 'junit.gradle'
 
-def ARTIFACT_ID = 'stf-gradle-plugin'
-def ARTIFACT_VERSION = '0.2.1'
+project.ext {
+    version = '0.2.2'
+    artifactId = 'stf-gradle-plugin'
+}
+
+apply from: '../publish.gradle'
 
 repositories {
     mavenLocal()
@@ -24,33 +28,7 @@ buildscript {
 
 dependencies {
     compile gradleApi()
-    compile 'com.github.e13mort:open-stf-client:0.3.1'
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = 'com.github.e13mort'
-            artifactId = ARTIFACT_ID
-            version = ARTIFACT_VERSION
-            from components.java
-        }
-    }
-}
-
-bintray {
-    user = rootProject.ext.bintrayUser
-    key = rootProject.ext.bintrayKey
-    publications = ['mavenJava']
-    pkg {
-        repo = 'maven'
-        name = ARTIFACT_ID
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/e13mort/stf-rest-client.git'
-        version {
-            name = ARTIFACT_VERSION
-        }
-    }
+    compile 'com.github.e13mort:open-stf-client:0.3.2'
 }
 
 sourceCompatibility = "1.7"

@@ -41,7 +41,7 @@ public class PluginSettings {
         return timeout;
     }
 
-    void validate(Logger logger) {
+    public void validate(Logger logger) {
         doValidation(logger, baseUrl, apiKey);
     }
 

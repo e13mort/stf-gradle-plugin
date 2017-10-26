@@ -13,7 +13,7 @@ buildscript {
         maven { url 'http://dl.bintray.com/e13mort/maven' }
     }
     dependencies {
-        classpath 'com.github.e13mort:stf-gradle-plugin:0.2.1'
+        classpath 'com.github.e13mort:stf-gradle-plugin:0.2.2'
     }
 }
 
