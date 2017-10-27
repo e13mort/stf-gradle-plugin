@@ -2,14 +2,17 @@ package com.github.e13mort.stfgradleplugin.tasks;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.e13mort.stf.client.DevicesParams;
 import com.github.e13mort.stf.client.FarmClient;
 import com.github.e13mort.stf.client.FarmInfo;
+import com.github.e13mort.stf.client.parameters.DevicesParams;
+import com.github.e13mort.stf.client.parameters.JsonDeviceParametersReader.JsonParamsReaderException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.util.Map;
 
 import io.reactivex.Notification;
 import io.reactivex.annotations.NonNull;
@@ -31,7 +34,24 @@ public class StfConnectionTask extends StfTask {
     }
 
     private DevicesParams getDeviceParams() {
-        return new PropertiesDevicesParamsImpl(getProject().getProperties(), getLogger());
+        final Map<String, ?> properties = getProject().getProperties();
+        final DevicesParams params = readRemoteParams(properties);
+        if (params != null) return params;
+        return readPropertiesParams(properties);
+    }
+
+    private PropertiesDevicesParamsImpl readPropertiesParams(Map<String, ?> properties) {
+        return new PropertiesDevicesParamsImpl(properties, getLogger());
+    }
+
+    private DevicesParams readRemoteParams(Map<String, ?> properties)  {
+        try {
+            final RemotePropertiesReader reader = RemotePropertiesReader.of(properties);
+            if (reader != null) return reader.readProperties();
+        } catch (MalformedURLException | JsonParamsReaderException e) {
+            getLogger().info("Remote parameters reading error", e);
+        }
+        return null;
     }
 
     private String convertParamsToString(final DevicesParams deviceParams) {
@@ -53,6 +73,7 @@ public class StfConnectionTask extends StfTask {
 
     private class NotificationsHandler implements Consumer<Notification<String>>, Action {
         private final FarmInfo info;
+        boolean needToWaitForDevice;
 
         NotificationsHandler(FarmInfo info) {
             this.info = info;
@@ -65,11 +86,16 @@ public class StfConnectionTask extends StfTask {
             } else {
                 log("Skip device", ipNotification.getError());
             }
+            needToWaitForDevice = true;
         }
 
         @Override
         public void run() throws Exception {
-            runAdb(info.getSdkPath() + "adb wait-for-any-device");
+            if (needToWaitForDevice) {
+                runAdb(info.getSdkPath() + "adb wait-for-any-device");
+            } else {
+                logL(TAG_STF, "There are no devices");
+            }
         }
 
         private void runAdb(String command) throws IOException {

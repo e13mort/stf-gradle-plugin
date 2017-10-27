@@ -2,7 +2,7 @@ package com.github.e13mort.stfgradleplugin.tasks;
 
 import com.github.e13mort.stf.adapter.filters.StringsFilterDescription;
 import com.github.e13mort.stf.adapter.filters.StringsFilterParser;
-import com.github.e13mort.stf.client.DevicesParams;
+import com.github.e13mort.stf.client.parameters.DevicesParams;
 
 import org.gradle.api.logging.LogLevel;
 import org.gradle.api.logging.Logger;
