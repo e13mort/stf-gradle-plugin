@@ -4,7 +4,7 @@ apply plugin: 'com.jfrog.bintray'
 apply from: 'junit.gradle'
 
 project.ext {
-    version = '0.2.2'
+    version = '0.2.3'
     artifactId = 'stf-gradle-plugin'
 }
 
@@ -28,7 +28,7 @@ buildscript {
 
 dependencies {
     compile gradleApi()
-    compile 'com.github.e13mort:open-stf-client:0.3.2'
+    compile 'com.github.e13mort:open-stf-client:0.3.3'
 }
 
 sourceCompatibility = "1.7"

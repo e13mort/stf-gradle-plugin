@@ -2,9 +2,9 @@ package com.github.e13mort.stfgradleplugin.tasks;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.e13mort.stf.client.DevicesParams;
 import com.github.e13mort.stf.client.FarmClient;
 import com.github.e13mort.stf.client.FarmInfo;
+import com.github.e13mort.stf.client.parameters.DevicesParams;
 
 import java.io.BufferedReader;
 import java.io.IOException;
