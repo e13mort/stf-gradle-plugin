@@ -13,7 +13,7 @@ buildscript {
         maven { url 'http://dl.bintray.com/e13mort/maven' }
     }
     dependencies {
-        classpath 'com.github.e13mort:stf-gradle-plugin:0.2.2'
+        classpath 'com.github.e13mort:stf-gradle-plugin:0.2.3'
     }
 }
 
@@ -43,7 +43,13 @@ You can specify the following params in order to select devices:
 - STF_MIN_API - filter out devices with API lower than specified
 - STF_MAX_API - filter out devices with API greater than specified
 - STF_PROVIDER - list of device providers. 'provider1,provider' - use devices only from this providers.
-- STF_SERIAL - list of serial numbers divided by `,` 
+- STF_SERIAL - list of serial numbers divided by `,`
+
+You can store connection params as a separate file (e.g. in VCS) and pass is's URL as 'STF_PROPERTIES_URL' parameter:
+ ```bash
+ ./gradlew :sample-app:connectedDebugAndroidTest -PSTF_PROPERTIES_URL=http://you-server/sample_params.json
+ ```
+ File format described on the [stf-console-client page](https://github.com/e13mort/stf-console-client#store-connection-parameters-in-a-file).
 
 By default, list parameters (name, provider and serial) are work with 'inclusion' logic. 
 To use this parameter with 'exclusion' logic use the `~` sign before a list. 
