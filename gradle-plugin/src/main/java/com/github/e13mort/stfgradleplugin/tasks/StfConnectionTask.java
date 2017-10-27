@@ -73,6 +73,7 @@ public class StfConnectionTask extends StfTask {
 
     private class NotificationsHandler implements Consumer<Notification<String>>, Action {
         private final FarmInfo info;
+        boolean needToWaitForDevice;
 
         NotificationsHandler(FarmInfo info) {
             this.info = info;
@@ -85,11 +86,16 @@ public class StfConnectionTask extends StfTask {
             } else {
                 log("Skip device", ipNotification.getError());
             }
+            needToWaitForDevice = true;
         }
 
         @Override
         public void run() throws Exception {
-            runAdb(info.getSdkPath() + "adb wait-for-any-device");
+            if (needToWaitForDevice) {
+                runAdb(info.getSdkPath() + "adb wait-for-any-device");
+            } else {
+                logL(TAG_STF, "There are no devices");
+            }
         }
 
         private void runAdb(String command) throws IOException {
