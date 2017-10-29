@@ -10,7 +10,7 @@ To use the plugin, you first need to configure `build.gradle` as follows
 ``` groovy
 buildscript {
     repositories {
-        maven { url 'http://dl.bintray.com/e13mort/maven' }
+        jcenter()
     }
     dependencies {
         classpath 'com.github.e13mort:stf-gradle-plugin:0.2.3'
