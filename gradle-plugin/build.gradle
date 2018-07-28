@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 apply from: 'junit.gradle'
+apply plugin: 'me.tatarka.retrolambda'
 
 project.ext {
     version = '0.2.3'
@@ -19,10 +20,12 @@ repositories {
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
+        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
     }
 }
 
@@ -31,5 +34,11 @@ dependencies {
     compile 'com.github.e13mort:open-stf-client:0.3.3'
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+retrolambda {
+    javaVersion JavaVersion.VERSION_1_7
+    defaultMethods true
+    incremental true
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8

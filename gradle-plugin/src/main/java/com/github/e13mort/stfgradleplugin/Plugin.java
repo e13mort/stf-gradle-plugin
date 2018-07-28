@@ -2,8 +2,6 @@ package com.github.e13mort.stfgradleplugin;
 
 import com.github.e13mort.stfgradleplugin.tasks.StfConnectionTask;
 import com.github.e13mort.stfgradleplugin.tasks.StfDisconnectionTask;
-
-import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.logging.LogLevel;
@@ -24,14 +22,11 @@ public class Plugin implements org.gradle.api.Plugin<Project> {
     }
 
     private void addTask(final Project project, final Task connectionTask, final Task disconnectionTask) {
-        project.getTasks().whenTaskAdded(new Action<Task>() {
-            @Override
-            public void execute(Task task) {
-                if (VALIDATOR.isAndroidTestTaskName(task.getName())) {
-                    task.dependsOn(connectionTask);
-                    task.finalizedBy(disconnectionTask);
-                    logTaskAttached(task, project);
-                }
+        project.getTasks().whenTaskAdded(task -> {
+            if (VALIDATOR.isAndroidTestTaskName(task.getName())) {
+                task.dependsOn(connectionTask);
+                task.finalizedBy(disconnectionTask);
+                logTaskAttached(task, project);
             }
         });
     }
