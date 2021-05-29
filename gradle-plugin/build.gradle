@@ -1,8 +1,17 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        // TODO: move away from bintray
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
-apply from: 'junit.gradle'
-apply plugin: 'me.tatarka.retrolambda'
 
 project.ext {
     version = '0.2.3'
@@ -17,28 +26,29 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
+java {
+    toolchain {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
-        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
-    }
+}
+
+
+test {
+    useJUnitPlatform()
 }
 
 dependencies {
-    compile gradleApi()
-    compile 'com.github.e13mort:open-stf-client:0.3.3'
-}
+    implementation gradleApi()
+    implementation 'com.github.e13mort:stf-rest-client:0.3.4-SNAPSHOT'
 
-retrolambda {
-    javaVersion JavaVersion.VERSION_1_7
-    defaultMethods true
-    incremental true
-}
+    def jacksonVersion = "2.12.3"
+    implementation "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+    implementation "io.reactivex.rxjava2:rxjava:2.2.21"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.7.1'
+}

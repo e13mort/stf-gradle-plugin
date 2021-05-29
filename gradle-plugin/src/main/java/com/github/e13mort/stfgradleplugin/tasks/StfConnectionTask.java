@@ -6,6 +6,10 @@ import com.github.e13mort.stf.client.FarmClient;
 import com.github.e13mort.stf.client.FarmInfo;
 import com.github.e13mort.stf.client.parameters.DevicesParams;
 import com.github.e13mort.stf.client.parameters.JsonDeviceParametersReader.JsonParamsReaderException;
+import io.reactivex.Notification;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,11 +17,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.util.Map;
-
-import io.reactivex.Notification;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 
 public class StfConnectionTask extends StfTask {
 
@@ -44,7 +43,7 @@ public class StfConnectionTask extends StfTask {
         return new PropertiesDevicesParamsImpl(properties, getLogger());
     }
 
-    private DevicesParams readRemoteParams(Map<String, ?> properties)  {
+    private DevicesParams readRemoteParams(Map<String, ?> properties) {
         try {
             final RemotePropertiesReader reader = RemotePropertiesReader.of(properties);
             if (reader != null) return reader.readProperties();
@@ -65,8 +64,8 @@ public class StfConnectionTask extends StfTask {
 
     private class ThrowableConsumer implements Consumer<Throwable> {
         @Override
-        public void accept(@NonNull Throwable throwable) throws Exception {
-            getState().setOutcome(new Exception(throwable.getMessage()));
+        public void accept(@NonNull Throwable throwable) {
+            getState().setOutcome(new RuntimeException(throwable.getMessage()));
             log("An error occurred during connection", throwable);
         }
     }
