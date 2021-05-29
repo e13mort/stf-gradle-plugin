@@ -10,10 +10,10 @@ To use the plugin, you first need to configure `build.gradle` as follows
 ``` groovy
 buildscript {
     repositories {
-        jcenter()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.github.e13mort:stf-gradle-plugin:0.2.3'
+        classpath 'com.github.e13mort:stf-gradle-plugin:0.4.0'
     }
 }
 
@@ -27,6 +27,7 @@ farmSettings {
     apiKey = 'api key created in user settings'
     adbPath = '<path to adb folder>'
     timeout = '<farm connection timeout in seconds. 1 minute by default>'
+    disconnectFromActive = 'true|false <should disconnect from previously connected or from all connected devices; false by default>'
 }
 ```
 
