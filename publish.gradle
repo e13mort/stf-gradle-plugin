@@ -14,20 +14,3 @@ publishing {
         }
     }
 }
-
-bintray {
-    user = rootProject.ext.bintrayUser
-    key = rootProject.ext.bintrayKey
-    publications = ['MyPublication']
-    override = true
-    publish = true
-    pkg {
-        repo = 'maven'
-        name = project.ext.artifactId
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/e13mort/stf-gradle-plugin.git'
-        version {
-            name = project.ext.version
-        }
-    }
-}
