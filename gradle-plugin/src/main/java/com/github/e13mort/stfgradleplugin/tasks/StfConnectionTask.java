@@ -66,7 +66,7 @@ public class StfConnectionTask extends StfTask {
         @Override
         public void accept(@NonNull Throwable throwable) {
             getState().setOutcome(new RuntimeException(throwable.getMessage()));
-            log("An error occurred during connection", throwable);
+            logL(TAG_STF, "An error occurred during connection: " + throwable.getMessage());
         }
     }
 
