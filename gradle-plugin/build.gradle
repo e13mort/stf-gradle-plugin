@@ -33,7 +33,7 @@ test {
 
 dependencies {
     implementation gradleApi()
-    implementation 'com.github.e13mort:stf-rest-client:0.3.4-SNAPSHOT'
+    implementation 'com.github.e13mort:stf-rest-client:0.3.4'
 
     def jacksonVersion = "2.12.3"
     implementation "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
