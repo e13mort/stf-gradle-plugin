@@ -2,6 +2,7 @@ package com.github.e13mort.stfgradleplugin.tasks;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.e13mort.stf.adapter.ConnectedFarmDevice;
 import com.github.e13mort.stf.client.FarmClient;
 import com.github.e13mort.stf.client.FarmInfo;
 import com.github.e13mort.stf.client.parameters.DevicesParams;
@@ -16,9 +17,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
-public class StfConnectionTask extends StfTask {
+public class StfConnectionTask extends StfTask implements ConnectionTask {
+
+    private List<String> connectedDevices = Collections.emptyList();
 
     @Override
     public void run() {
@@ -27,9 +33,12 @@ public class StfConnectionTask extends StfTask {
         final DevicesParams deviceParams = getDeviceParams();
         final NotificationsHandler handler = new NotificationsHandler(info);
         logI(TAG_STF, convertParamsToString(deviceParams));
+        //noinspection ResultOfMethodCallIgnored
         farmClient
-                .connectToDevices(deviceParams)
+                .connectToDevicesByParams(deviceParams)
                 .subscribe(handler, new ThrowableConsumer(), handler);
+        connectedDevices = handler.connectedDevices;
+        logI(TAG_STF, "Connected devices: " + connectedDevices);
     }
 
     private DevicesParams getDeviceParams() {
@@ -62,6 +71,11 @@ public class StfConnectionTask extends StfTask {
         }
     }
 
+    @Override
+    public List<String> connectedDevices() {
+        return connectedDevices;
+    }
+
     private class ThrowableConsumer implements Consumer<Throwable> {
         @Override
         public void accept(@NonNull Throwable throwable) {
@@ -70,18 +84,23 @@ public class StfConnectionTask extends StfTask {
         }
     }
 
-    private class NotificationsHandler implements Consumer<Notification<String>>, Action {
+    private class NotificationsHandler implements Consumer<Notification<ConnectedFarmDevice>>, Action {
         private final FarmInfo info;
         boolean needToWaitForDevice;
+        private final List<String> connectedDevices = new ArrayList<>();
 
         NotificationsHandler(FarmInfo info) {
             this.info = info;
         }
 
         @Override
-        public void accept(@NonNull Notification<String> ipNotification) throws Exception {
+        public void accept(@NonNull Notification<ConnectedFarmDevice> ipNotification) throws Exception {
             if (ipNotification.isOnNext()) {
-                runAdb(info.getSdkPath() + "adb connect " + ipNotification.getValue());
+                final ConnectedFarmDevice response = ipNotification.getValue();
+                if (response != null) {
+                    runAdb(info.getSdkPath() + "adb connect " + response.getRemoteConnectUrl());
+                    connectedDevices.add(response.getSerial());
+                }
             } else {
                 log("Skip device", ipNotification.getError());
             }
