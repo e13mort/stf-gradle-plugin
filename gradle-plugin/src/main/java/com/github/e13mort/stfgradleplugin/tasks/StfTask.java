@@ -36,17 +36,17 @@ public abstract class StfTask extends DefaultTask {
         getLogger().log(LogLevel.ERROR, message, e);
     }
 
-    private void log(String tag, String message, LogLevel level) {
-        getLogger().log(level, tag + ": " + message);
-    }
-
-    private PluginSettings getSettings() {
+    protected PluginSettings getSettings() {
         final PluginSettings settings = getProject().getExtensions().findByType(PluginSettings.class);
         if (settings == null) {
             throw new NullPointerException("Settings is null");
         }
         settings.validate(getLogger());
         return settings;
+    }
+
+    private void log(String tag, String message, LogLevel level) {
+        getLogger().log(level, tag + ": " + message);
     }
 
 }

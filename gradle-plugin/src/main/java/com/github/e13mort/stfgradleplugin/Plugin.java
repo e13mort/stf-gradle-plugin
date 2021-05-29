@@ -15,8 +15,9 @@ public class Plugin implements org.gradle.api.Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        final Task connectionTask = project.getTasks().create(TASK_NAME_CONNECT, StfConnectionTask.class);
+        final StfConnectionTask connectionTask = project.getTasks().create(TASK_NAME_CONNECT, StfConnectionTask.class);
         final StfDisconnectionTask disconnectionTask = project.getTasks().create(TASK_NAME_DISCONNECT, StfDisconnectionTask.class);
+        disconnectionTask.take(connectionTask);
         project.getExtensions().create(FARM_SETTINGS, PluginSettings.class);
         addTask(project, connectionTask, disconnectionTask);
     }

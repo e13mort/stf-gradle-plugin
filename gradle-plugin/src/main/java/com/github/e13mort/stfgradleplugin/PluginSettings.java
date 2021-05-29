@@ -8,6 +8,7 @@ public class PluginSettings {
     private String apiKey;
     private String adbPath;
     private int timeout;
+    private boolean disconnectFromActive;
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -41,6 +42,14 @@ public class PluginSettings {
         return timeout;
     }
 
+    public boolean isDisconnectFromActive() {
+        return disconnectFromActive;
+    }
+
+    public void setDisconnectFromActive(boolean disconnectFromActive) {
+        this.disconnectFromActive = disconnectFromActive;
+    }
+
     public void validate(Logger logger) {
         doValidation(logger, baseUrl, apiKey);
     }
@@ -56,12 +65,12 @@ public class PluginSettings {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("PluginSettings{");
-        sb.append("baseUrl='").append(baseUrl).append('\'');
-        sb.append(", apiKey='").append(apiKey).append('\'');
-        sb.append(", adbPath='").append(adbPath).append('\'');
-        sb.append(", timeout=").append(timeout);
-        sb.append('}');
-        return sb.toString();
+        return "PluginSettings{" +
+                "baseUrl='" + baseUrl + '\'' +
+                ", apiKey='" + apiKey + '\'' +
+                ", adbPath='" + adbPath + '\'' +
+                ", timeout=" + timeout +
+                ", disconnectFromActive=" + disconnectFromActive +
+                '}';
     }
 }
