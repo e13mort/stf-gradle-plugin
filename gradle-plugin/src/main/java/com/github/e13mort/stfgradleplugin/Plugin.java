@@ -23,13 +23,13 @@ public class Plugin implements org.gradle.api.Plugin<Project> {
     }
 
     private void addTask(final Project project, final Task connectionTask, final Task disconnectionTask) {
-        project.getTasks().whenTaskAdded(task -> {
+        project.afterEvaluate(project1 -> project1.getTasks().forEach(task -> {
             if (VALIDATOR.isAndroidTestTaskName(task.getName())) {
                 task.dependsOn(connectionTask);
                 task.finalizedBy(disconnectionTask);
-                logTaskAttached(task, project);
+                logTaskAttached(task, project1);
             }
-        });
+        }));
     }
 
     private void logTaskAttached(Task task, Project project) {
