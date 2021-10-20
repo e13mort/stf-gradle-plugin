@@ -5,6 +5,7 @@ import com.github.e13mort.stfgradleplugin.PluginSettings;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.LogLevel;
+import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.TaskAction;
 
 /**
@@ -19,6 +20,7 @@ public abstract class StfTask extends DefaultTask {
     @TaskAction
     public abstract void run();
 
+    @Internal
     FarmInfo getFarmInfo() {
         final PluginSettings settings = getSettings();
         return new FarmInfo(settings.getBaseUrl(), settings.getApiKey(), settings.getAdbPath(), settings.getTimeout());
@@ -36,6 +38,7 @@ public abstract class StfTask extends DefaultTask {
         getLogger().log(LogLevel.ERROR, message, e);
     }
 
+    @Internal
     protected PluginSettings getSettings() {
         final PluginSettings settings = getProject().getExtensions().findByType(PluginSettings.class);
         if (settings == null) {
