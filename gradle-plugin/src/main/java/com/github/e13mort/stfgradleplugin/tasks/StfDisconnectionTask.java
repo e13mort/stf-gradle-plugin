@@ -1,6 +1,7 @@
 package com.github.e13mort.stfgradleplugin.tasks;
 
 import com.github.e13mort.stf.client.FarmClient;
+import com.github.e13mort.stfgradleplugin.storage.ConnectedDevicesRepository;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class StfDisconnectionTask extends StfTask {
 
-    private ConnectionTask connectionTask = ConnectionTask.EMPTY;
+    private ConnectedDevicesRepository connectedDevicesRepository = ConnectedDevicesRepository.EMPTY;
 
     @Override
     public void run() {
@@ -31,12 +32,15 @@ public class StfDisconnectionTask extends StfTask {
     }
 
     private void disconnectFromActiveDevice(FarmClient client) {
-        final List<String> serialNumbers = connectionTask.connectedDevices();
+        final List<String> serialNumbers = connectedDevicesRepository.connectedDevices();
         logI(StfTask.TAG_STF, "Disconnect from: " + serialNumbers.toString());
         //noinspection ResultOfMethodCallIgnored
         client.disconnectFromDevices(serialNumbers)
                 .subscribe(
-                        notification -> logL(TAG_STF, "Disconnected from " + notification.getValue()),
+                        notification -> {
+                            logL(TAG_STF, "Disconnected from " + notification.getValue());
+                            connectedDevicesRepository.clear();
+                        },
                         throwable -> log("Disconnection error", throwable));
     }
 
@@ -44,7 +48,7 @@ public class StfDisconnectionTask extends StfTask {
         return getSettings().isDisconnectFromActive();
     }
 
-    public void take(ConnectionTask connectionTask) {
-        this.connectionTask = connectionTask;
+    public void take(ConnectedDevicesRepository connectedDevicesRepository) {
+        this.connectedDevicesRepository = connectedDevicesRepository;
     }
 }
