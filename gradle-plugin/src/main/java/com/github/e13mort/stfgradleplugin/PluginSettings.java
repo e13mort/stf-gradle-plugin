@@ -9,6 +9,7 @@ public class PluginSettings {
     private String adbPath;
     private int timeout;
     private boolean disconnectFromActive;
+    private boolean attachToTestTaskManually;
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -50,6 +51,14 @@ public class PluginSettings {
         this.disconnectFromActive = disconnectFromActive;
     }
 
+    public boolean isAttachToTestTaskManually() {
+        return attachToTestTaskManually;
+    }
+
+    public void setAttachToTestTaskManually(boolean attachToTestTaskManually) {
+        this.attachToTestTaskManually = attachToTestTaskManually;
+    }
+
     public void validate(Logger logger) {
         doValidation(logger, baseUrl, apiKey);
     }
@@ -71,6 +80,7 @@ public class PluginSettings {
                 ", adbPath='" + adbPath + '\'' +
                 ", timeout=" + timeout +
                 ", disconnectFromActive=" + disconnectFromActive +
+                ", attachToTestTaskManually=" + attachToTestTaskManually +
                 '}';
     }
 }
